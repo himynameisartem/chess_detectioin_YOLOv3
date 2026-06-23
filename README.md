@@ -1,170 +1,67 @@
-# ♟️ Chess Piece Detection using YOLOv3
+# Chess Piece Detection with YOLOv3
 
-> Deep Learning project for chess piece detection using a custom implementation of **YOLOv3 in PyTorch**.
-
----
-
-## 📚 Table of Contents
-
-- [English Version](#english-version)
-  - [Project Overview](#project-overview)
-  - [Project Goals](#project-goals)
-  - [Dataset](#dataset)
-  - [Model Architecture](#model-architecture)
-  - [Project Structure](#project-structure)
-  - [Technologies Used](#technologies-used)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Results](#results)
-  - [Future Improvements](#future-improvements)
-- [Russian Version 🇷🇺](#russian-version-)
-  - [Описание проекта](#описание-проекта)
-  - [Цели проекта](#цели-проекта)
-  - [Датасет](#датасет)
-  - [Архитектура модели](#архитектура-модели)
-  - [Структура проекта](#структура-проекта)
-  - [Технологии](#технологии)
-  - [Установка](#установка)
-  - [Запуск](#запуск)
-  - [Результаты](#результаты)
-  - [Планы по улучшению](#планы-по-улучшению)
+[English](#english) | [Русский](#русский)
 
 ---
 
-# English Version
+## English
 
-## Project Overview
+### Overview
 
-This project focuses on **chess piece detection** using a custom implementation of **YOLOv3 (You Only Look Once)** built with **PyTorch**.
+This project is a custom implementation of a YOLOv3-style object detector for chess piece recognition.  
+The model is trained from scratch in PyTorch and predicts 12 chess piece classes:
 
-The goal of this project is to explore object detection principles and build a deep learning pipeline for recognizing chess pieces on chessboard images.
+- black-bishop
+- black-king
+- black-knight
+- black-pawn
+- black-queen
+- black-rook
+- white-bishop
+- white-king
+- white-knight
+- white-pawn
+- white-queen
+- white-rook
 
-Unlike projects that rely on ready-made object detection frameworks, this implementation focuses on understanding the internal mechanics of YOLOv3, including:
+The repository includes the full training pipeline: dataset loading, target generation, model architecture, loss function, checkpointing, and inference.
 
-- custom model architecture
-- anchor boxes
-- bounding box regression
-- YOLO loss function
-- dataset processing
-- training pipeline
-- validation workflow
+### Features
 
----
+- Custom YOLOv3-style detector implemented in PyTorch
+- Training and validation loops with checkpoint saving
+- Best-checkpoint inference workflow
+- Bounding box decoding and non-maximum suppression
+- Support for Roboflow-oriented labels converted to axis-aligned boxes
 
-## Project Goals
-
-- Learn object detection fundamentals
-- Implement a custom YOLOv3 architecture
-- Work with labeled image datasets
-- Train an object detection model
-- Understand anchor boxes and bounding boxes
-- Gain practical experience in PyTorch Computer Vision
-
----
-
-## Dataset
-
-The dataset contains labeled chessboard images with annotated chess pieces.
-
-### Dataset Split
-
-| Split | Images |
-|--------|---------|
-| Train | 606 |
-| Validation | 58 |
-
-### Classes
-
-The model detects **12 chess piece classes**:
-
-- White King
-- White Queen
-- White Rook
-- White Bishop
-- White Knight
-- White Pawn
-- Black King
-- Black Queen
-- Black Rook
-- Black Bishop
-- Black Knight
-- Black Pawn
-
----
-
-## Model Architecture
-
-This project uses a **custom implementation of YOLOv3** in **PyTorch**.
-
-Implemented components include:
-
-- Darknet-inspired backbone
-- Detection heads
-- Anchor boxes
-- Bounding box regression
-- YOLO loss function
-- Custom dataset loader
-- Training loop
-
-The implementation was created for educational purposes and practical deep learning experience.
-
----
-
-## Project Structure
+### Project Structure
 
 ```text
-chess_detectioin_YOLOv3/
-│── notebooks/
-│   └── edu.ipynb
-│
-│── main.py
-│── requirements.txt
-│── README.md
+.
+├── assets/                  # README screenshots
+├── notebooks/               # notebook experiments, dataset, checkpoints
+├── src/
+│   ├── config.py
+│   ├── dataset.py
+│   ├── download_dataset.py
+│   ├── loss.py
+│   ├── model.py
+│   ├── predict.py
+│   └── train.py
+├── main.py                  # CLI entry point
+└── requirements.txt
 ```
 
-### File Description
+### Dataset
 
-| File | Description |
-|------|-------------|
-| `notebooks/edu.ipynb` | Main notebook with YOLOv3 implementation and training |
-| `main.py` | Auxiliary Python file |
-| `requirements.txt` | Project dependencies |
-| `README.md` | Project documentation |
+The project uses the Roboflow chess dataset stored under `notebooks/chess_yolo/chess_yolo/`.
 
----
+- Train images: `606`
+- Validation images: `58`
+- Test images: `29`
+- Input size: `320 x 320`
 
-## Technologies Used
-
-### Programming Language
-- Python
-
-### Deep Learning
-- PyTorch
-
-### Computer Vision
-- OpenCV
-- PIL
-
-### Data Processing
-- NumPy
-- Pandas
-
-### Visualization
-- Matplotlib
-
-### Environment
-- Jupyter Notebook
-
----
-
-## Installation
-
-Clone the repository:
-
-```bash
-git clone https://github.com/himynameisartem/chess_detectioin_YOLOv3.git
-cd chess_detectioin_YOLOv3
-```
+### Training
 
 Install dependencies:
 
@@ -172,242 +69,143 @@ Install dependencies:
 pip install -r requirements.txt
 ```
 
----
-
-## Usage
-
-Launch Jupyter Notebook:
+Run training:
 
 ```bash
-jupyter notebook
+python3 -m main train
 ```
 
-Open:
+The training script saves:
 
-```text
-notebooks/edu.ipynb
-```
+- latest checkpoint: `notebooks/yolov3_checkpoint.pth`
+- best checkpoint: `notebooks/yolov3_best.pth`
 
-The notebook contains:
+### Inference
 
-- dataset preparation
-- model implementation
-- training pipeline
-- validation
-- prediction experiments
-
----
-
-## Results
-
-This project demonstrates a complete deep learning workflow for object detection:
-
-**data → training → optimization → validation → predictions**
-
-During training, model loss decreases over epochs, providing practical experience with:
-
-- object detection
-- bounding boxes
-- anchor boxes
-- CNN architectures
-- computer vision pipelines
-
----
-
-## Future Improvements
-
-Planned improvements:
-
-- Add `predict.py` for inference
-- Add prediction visualization
-- Add evaluation metrics (`mAP`)
-- Improve project structure
-- Export trained weights
-- Create deployment API
-
----
-
-# Russian Version 🇷🇺
-
-## Описание проекта
-
-Проект посвящён **детекции шахматных фигур** с использованием собственной реализации **YOLOv3 на PyTorch**.
-
-Основная цель проекта — изучить принципы **object detection** и построить полноценный deep learning pipeline для распознавания фигур на изображениях шахматной доски.
-
-В отличие от проектов на готовых библиотеках, здесь реализованы ключевые компоненты YOLOv3 вручную:
-
-- архитектура модели
-- anchor boxes
-- bounding box regression
-- функция потерь
-- обработка датасета
-- цикл обучения
-- валидация
-
----
-
-## Цели проекта
-
-- Изучить object detection
-- Реализовать собственную YOLOv3
-- Научиться работать с размеченными изображениями
-- Построить pipeline обучения модели
-- Изучить bounding boxes и anchor boxes
-- Получить практический опыт в PyTorch CV
-
----
-
-## Датасет
-
-Датасет содержит изображения шахматных досок с размеченными фигурами.
-
-### Разделение данных
-
-| Split | Images |
-|--------|---------|
-| Train | 606 |
-| Validation | 58 |
-
-### Классы
-
-Модель обучается распознавать **12 классов шахматных фигур**:
-
-- Белый король
-- Белый ферзь
-- Белая ладья
-- Белый слон
-- Белый конь
-- Белая пешка
-- Чёрный король
-- Чёрный ферзь
-- Чёрная ладья
-- Чёрный слон
-- Чёрный конь
-- Чёрная пешка
-
----
-
-## Архитектура модели
-
-В проекте используется **собственная реализация YOLOv3**.
-
-Реализованы:
-
-- backbone в стиле Darknet
-- detection heads
-- anchor boxes
-- bounding box regression
-- YOLO loss
-- загрузчик данных
-- цикл обучения
-
----
-
-## Структура проекта
-
-```text
-chess_detectioin_YOLOv3/
-│── notebooks/
-│   └── edu.ipynb
-│
-│── main.py
-│── requirements.txt
-│── README.md
-```
-
----
-
-## Технологии
-
-### Язык программирования
-- Python
-
-### Deep Learning
-- PyTorch
-
-### Computer Vision
-- OpenCV
-- PIL
-
-### Обработка данных
-- NumPy
-- Pandas
-
-### Визуализация
-- Matplotlib
-
-### Среда разработки
-- Jupyter Notebook
-
----
-
-## Установка
-
-Клонировать репозиторий:
+Run prediction on an image:
 
 ```bash
-git clone https://github.com/himynameisartem/chess_detectioin_YOLOv3.git
-cd chess_detectioin_YOLOv3
+python3 -m main predict --image assets/example_1.png
 ```
 
-Установить зависимости:
+Inference uses the best saved checkpoint by default.
+
+### Results
+
+Examples below show predictions produced by the trained model on dataset-style images.
+
+![Prediction 1](assets/example_1.png)
+
+![Prediction 2](assets/example_2.png)
+
+![Prediction 3](assets/example_3.png)
+
+### Notes and Limitations
+
+- The detector performs best on images that are visually close to the training dataset distribution.
+- Generalization to external images with different boards, lighting, camera angles, or piece styles is more limited.
+- This repository is focused on a from-scratch educational implementation of YOLOv3-style detection rather than a production-optimized detector.
+
+---
+
+## Русский
+
+### Описание
+
+Этот проект представляет собой собственную реализацию детектора объектов в стиле YOLOv3 для распознавания шахматных фигур.  
+Модель обучается с нуля на PyTorch и предсказывает 12 классов фигур:
+
+- black-bishop
+- black-king
+- black-knight
+- black-pawn
+- black-queen
+- black-rook
+- white-bishop
+- white-king
+- white-knight
+- white-pawn
+- white-queen
+- white-rook
+
+В репозитории есть полный пайплайн: загрузка датасета, генерация target-ов, архитектура модели, функция потерь, сохранение чекпоинтов и инференс.
+
+### Возможности
+
+- Собственная YOLOv3-style модель на PyTorch
+- Циклы обучения и валидации с сохранением чекпоинтов
+- Инференс через лучший сохраненный чекпоинт
+- Декодирование bounding boxes и non-maximum suppression
+- Поддержка ориентированной разметки Roboflow с переводом в обычные прямоугольные боксы
+
+### Структура проекта
+
+```text
+.
+├── assets/                  # скриншоты для README
+├── notebooks/               # эксперименты в ноутбуке, датасет, чекпоинты
+├── src/
+│   ├── config.py
+│   ├── dataset.py
+│   ├── download_dataset.py
+│   ├── loss.py
+│   ├── model.py
+│   ├── predict.py
+│   └── train.py
+├── main.py                  # CLI entry point
+└── requirements.txt
+```
+
+### Датасет
+
+Проект использует шахматный датасет Roboflow, который хранится в `notebooks/chess_yolo/chess_yolo/`.
+
+- Train images: `606`
+- Validation images: `58`
+- Test images: `29`
+- Размер входа: `320 x 320`
+
+### Обучение
+
+Установка зависимостей:
 
 ```bash
 pip install -r requirements.txt
 ```
 
----
-
-## Запуск
-
-Запустить Jupyter Notebook:
+Запуск обучения:
 
 ```bash
-jupyter notebook
+python3 -m main train
 ```
 
-Открыть:
+Скрипт обучения сохраняет:
 
-```text
-notebooks/edu.ipynb
+- последний чекпоинт: `notebooks/yolov3_checkpoint.pth`
+- лучший чекпоинт: `notebooks/yolov3_best.pth`
+
+### Инференс
+
+Запуск предсказания на изображении:
+
+```bash
+python3 -m main predict --image assets/example_1.png
 ```
 
-Ноутбук содержит:
+По умолчанию для инференса используется лучший сохраненный чекпоинт.
 
-- подготовку данных
-- реализацию модели
-- обучение
-- валидацию
-- эксперименты с предсказаниями
+### Результаты
 
----
+Ниже показаны примеры предсказаний модели на изображениях, близких к обучающему датасету.
 
-## Результаты
+![Prediction 1](assets/example_1.png)
 
-Проект демонстрирует полный workflow deep learning модели:
+![Prediction 2](assets/example_2.png)
 
-**данные → обучение → оптимизация → валидация → предсказания**
+![Prediction 3](assets/example_3.png)
 
-Во время обучения наблюдается снижение `loss`, что позволяет получить практический опыт работы с:
+### Ограничения
 
-- object detection
-- bounding boxes
-- anchor boxes
-- CNN архитектурами
-- computer vision pipeline
-
----
-
-## Планы по улучшению
-
-- Добавить `predict.py`
-- Добавить визуализацию detections
-- Добавить метрику `mAP`
-- Улучшить структуру проекта
-- Добавить сохранение лучших весов модели
-- Сделать API для inference
-
----
-
-⭐ **If you like this project, feel free to star the repository!**
+- Детектор лучше всего работает на изображениях, визуально похожих на обучающий датасет.
+- Обобщение на внешние изображения с другой доской, освещением, ракурсом камеры или стилем фигур заметно слабее.
+- Репозиторий в первую очередь показывает учебную реализацию YOLOv3-style детектора с нуля, а не production-оптимизированную систему.

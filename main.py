@@ -1,16 +1,38 @@
-# This is a sample Python script.
+import argparse
 
-# Press ⌃F5 to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press F9 to toggle the breakpoint.
+from src.download_dataset import download_dataset
+from src.train import train
+from src.predict import load_model, detect_and_scale_boxes
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+def main():
+    parser = argparse.ArgumentParser(description="Chess piece detection with YOLOv3")
+    parser.add_argument(
+        "mode",
+        choices=["download", "train", "predict"],
+        help="What to run: download dataset, train model, or run prediction",
+    )
+    parser.add_argument(
+        "--image",
+        type=str,
+        default=None,
+        help="Path to image for prediction",
+    )
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    args = parser.parse_args()
+
+    if args.mode == "download":
+        download_dataset()
+
+    elif args.mode == "train":
+        train()
+
+    elif args.mode == "predict":
+        if args.image is None:
+            raise ValueError("For predict mode, provide --image path")
+        model = load_model()
+        detect_and_scale_boxes(args.image, model)
+
+
+if __name__ == "__main__":
+    main()
